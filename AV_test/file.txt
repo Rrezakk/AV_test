@@ -1,0 +1,39 @@
+﻿{
+"query":"query SearchReportWoodDealCount($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!]) {
+  searchReportWoodDeal(filter: $filter, pageable: {number: $number, size: $size}, orders: $orders) {
+    total
+    number
+    size
+    overallBuyerVolume
+    overallSellerVolume
+    __typename
+  }
+}
+","variables":{"size":20,"number":0,"filter":null},"operationName":"SearchReportWoodDealCount"}
+
+query SearchReportWoodDealCount {
+  searchReportWoodDeal {
+    total
+    number
+    size
+    overallBuyerVolume
+    overallSellerVolume
+    __typename
+  }
+}
+
+
+
+{
+"data":{
+    "searchReportWoodDeal":
+        {
+        "total":150337,
+        "number":0,
+        "size":20,
+        "overallBuyerVolume":1.8189640533100066E8,
+        "overallSellerVolume":2.411955186460015E8,
+        "__typename":"PageReportWoodDeal"
+        }
+    }
+}
