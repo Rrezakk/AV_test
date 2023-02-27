@@ -20,7 +20,7 @@ public class WoodDealsPageParser
     public void DoCycle()
     {
         var dealsCountJson = _queryExecutor.Execute(new GetCountQuery());
-        var response = JsonConvert.DeserializeObject<SearchReportWoodDealResponse>(dealsCountJson ?? string.Empty)?.data.searchReportWoodDeal;
+        var response = JsonConvert.DeserializeObject<SearchReportWoodDealResponse>(dealsCountJson ?? string.Empty)?.data?.searchReportWoodDeal;
         const int entitiesPerRequest = 20;
         var totalEntities = response?.total ?? 0;
         var ctr = 0;
@@ -34,7 +34,7 @@ public class WoodDealsPageParser
             var deals = WoodDealDeserializer.GetDeals(resp);
             foreach (var deal in deals)
             {
-                deal.object_hash = Domain.Helpers.ObjectHashingHelper.ComputeSha256Hash(deal);
+                deal.object_hash = ObjectHashingHelper.ComputeSha256Hash(deal);
                 ProcessDeal(deal);
             }
             ctr += deals.Count;
@@ -54,12 +54,12 @@ public class WoodDealsPageParser
         var dbDeal = _woodDealsRepository.Get(deal);
         if (dbDeal == null)//creating
         {
-            Console.WriteLine($" - creating entity");
+            Console.WriteLine(" - creating entity");
             _woodDealsRepository.Create(deal);
             return;
         }
         if (dbDeal.object_hash == deal.object_hash) return;//editing 
-        Console.WriteLine($" - editing entity");
+        Console.WriteLine(" - editing entity");
         _woodDealsRepository.Edit(deal);
     }
 }

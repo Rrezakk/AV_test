@@ -1,6 +1,4 @@
-﻿using AV_test.Parsing.Interfaces;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 
 namespace AV_test.Parsing.Queries
 {
@@ -14,8 +12,8 @@ namespace AV_test.Parsing.Queries
             private readonly int _page;
             public GetWoodDealsQuery(int count, int page)
             {
-                this._count = count;
-                this._page = page;
+                _count = count;
+                _page = page;
             }
             private HttpRequestMessage RequestMessage()
             {

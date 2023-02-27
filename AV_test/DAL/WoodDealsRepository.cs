@@ -17,7 +17,7 @@ public class WoodDealsRepository:IWoodDealsRepository
     {
         try
         {
-            entity.object_hash = Domain.Helpers.ObjectHashingHelper.ComputeSha256Hash(entity);
+            entity.object_hash = ObjectHashingHelper.ComputeSha256Hash(entity);
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
             using var command = connection.CreateCommand();
@@ -38,7 +38,12 @@ public class WoodDealsRepository:IWoodDealsRepository
     }
     public ReportWoodDeal? Get(ReportWoodDeal entity)
     {
-        return Get(entity.SellerInn,entity.BuyerInn,entity.DealNumber);
+        if (!string.IsNullOrWhiteSpace(entity.SellerInn) && 
+            !string.IsNullOrWhiteSpace(entity.BuyerInn) &&
+            !string.IsNullOrWhiteSpace(entity.DealNumber))
+            return Get(entity.SellerInn!, entity.BuyerInn!, entity.DealNumber!);
+        Console.WriteLine("Error: primary key is not valid");
+        return null;
     }
     public ReportWoodDeal? Get(string sellerInn, string buyerInn, string dealNumber)
     {
@@ -52,16 +57,18 @@ public class WoodDealsRepository:IWoodDealsRepository
                 $"FROM ReportWoodDeal WHERE sellerInn = '{sellerInn}' AND buyerInn = '{buyerInn}' AND dealNumber = '{dealNumber}'";
             using var reader = command.ExecuteReader();
             if (!reader.Read()) return null;
-            var report = new ReportWoodDeal();
-            report.SellerName = reader.GetString(0);
-            report.SellerInn = reader.GetString(1);
-            report.BuyerName = reader.GetString(2);
-            report.BuyerInn = reader.GetString(3);
-            report.WoodVolumeBuyer = (float)reader.GetDouble(4);
-            report.WoodVolumeSeller = (float)reader.GetDouble(5);
-            report.DealDate = reader.GetString(6);
-            report.DealNumber = reader.GetString(7);
-            report.object_hash = reader.GetString(8);
+            var report = new ReportWoodDeal
+            {
+                SellerName = reader.GetString(0),
+                SellerInn = reader.GetString(1),
+                BuyerName = reader.GetString(2),
+                BuyerInn = reader.GetString(3),
+                WoodVolumeBuyer = (float)reader.GetDouble(4),
+                WoodVolumeSeller = (float)reader.GetDouble(5),
+                DealDate = reader.GetString(6),
+                DealNumber = reader.GetString(7),
+                object_hash = reader.GetString(8)
+            };
             return report;
         }
         catch (Exception e)
@@ -72,7 +79,7 @@ public class WoodDealsRepository:IWoodDealsRepository
     }
     public bool Edit(ReportWoodDeal entity)
     {
-        entity.object_hash = Domain.Helpers.ObjectHashingHelper.ComputeSha256Hash(entity);
+        entity.object_hash = ObjectHashingHelper.ComputeSha256Hash(entity);
         using var connection = new SqlConnection(_connectionString);
         connection.Open();
 

@@ -56,14 +56,14 @@
         <Compile Include="DAL\Interfaces\IGenericRepository.cs" />
         <Compile Include="DAL\Interfaces\IWoodDealsRepository.cs" />
         <Compile Include="DAL\WoodDealsRepository.cs" />
-        <Compile Include="Domain\Helpers\ObjectHashingHelper.cs" />
+        <Compile Include="ObjectHashingHelper.cs" />
         <Compile Include="Parsing\Deserialization\WoodDeals\SearchReportWoodDealResult.cs" />
-        <Compile Include="Parsing\Deserialization\WoodDeals\WoodDeal.cs" />
+        <Compile Include="Parsing\Deserialization\WoodDeals\ReportWoodDeal.cs" />
         <Compile Include="Parsing\Deserialization\WoodDeals\WoodDealDeserializer.cs" />
-        <Compile Include="Parsing\Interfaces\IApiQuery.cs" />
         <Compile Include="Parsing\PageParsers\WoodDealsPageParser.cs" />
         <Compile Include="Parsing\Queries\GetCountQuery.cs" />
         <Compile Include="Parsing\Queries\GetWoodDealsQuery.cs" />
+        <Compile Include="Parsing\Queries\IApiQuery.cs" />
         <Compile Include="Parsing\QueryExecutor.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,10 +72,6 @@
       <Content Include="file.txt" />
       <Content Include="Get20.http" />
       <Content Include="getdata.http" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Domain\Models" />
-      <Folder Include="Queries" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
