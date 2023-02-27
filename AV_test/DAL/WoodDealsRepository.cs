@@ -2,6 +2,7 @@
 using AV_test.Parsing.Deserialization.WoodDeals;
 using System;
 using System.Data.SqlClient;
+using System.Globalization;
 
 namespace AV_test.DAL;
 
@@ -22,9 +23,10 @@ public class WoodDealsRepository:IWoodDealsRepository
             using var command = connection.CreateCommand();
             command.CommandText = $@"
             INSERT INTO ReportWoodDeal (SellerName, SellerInn, BuyerName, BuyerInn, WoodVolumeBuyer, WoodVolumeSeller, DealDate, DealNumber, object_hash)
-            VALUES ('{entity.SellerName}', '{entity.SellerInn}', '{entity.BuyerName}', '{entity.BuyerInn}', 
-            '{entity.WoodVolumeBuyer}', '{entity.WoodVolumeSeller}', '{entity.DealDate}', '{entity.DealNumber}', '{entity.object_hash}')
-        ";
+            VALUES ('{entity.SellerName}', '{entity.SellerInn}', '{entity.BuyerName}', '{entity.BuyerInn}',
+             {entity.WoodVolumeBuyer.ToString(CultureInfo.InvariantCulture).Replace(',', '.')},
+              {entity.WoodVolumeSeller.ToString(CultureInfo.InvariantCulture).Replace(',', '.')},
+                    '{entity.DealDate}', '{entity.DealNumber}', '{entity.object_hash}')";
             command.ExecuteNonQuery();
             return true;
         }
@@ -45,22 +47,21 @@ public class WoodDealsRepository:IWoodDealsRepository
             using var connection = new SqlConnection(_connectionString);
             connection.Open();
             using var command = connection.CreateCommand();
-            command.CommandText = "SELECT sellerName, sellerInn, buyerName, buyerInn, woodVolumeBuyer, woodVolumeSeller, dealDate, dealNumber, object_hash " +
-                                  $"FROM ReportWoodDeal WHERE sellerInn = '{sellerInn}' AND buyerInn = '{buyerInn}' AND dealNumber = '{dealNumber}'";
+            command.CommandText =
+                "SELECT sellerName, sellerInn, buyerName, buyerInn, woodVolumeBuyer, woodVolumeSeller, dealDate, dealNumber, object_hash " +
+                $"FROM ReportWoodDeal WHERE sellerInn = '{sellerInn}' AND buyerInn = '{buyerInn}' AND dealNumber = '{dealNumber}'";
             using var reader = command.ExecuteReader();
             if (!reader.Read()) return null;
-            var report = new ReportWoodDeal
-            {
-                SellerName = reader.GetString(0),
-                SellerInn = reader.GetString(1),
-                BuyerName = reader.GetString(2),
-                BuyerInn = reader.GetString(3),
-                WoodVolumeBuyer = reader.GetFloat(4),
-                WoodVolumeSeller = reader.GetFloat(5),
-                DealDate = reader.GetDateTime(6),
-                DealNumber = reader.GetString(7),
-                object_hash = reader.GetString(8)
-            };
+            var report = new ReportWoodDeal();
+            report.SellerName = reader.GetString(0);
+            report.SellerInn = reader.GetString(1);
+            report.BuyerName = reader.GetString(2);
+            report.BuyerInn = reader.GetString(3);
+            report.WoodVolumeBuyer = (float)reader.GetDouble(4);
+            report.WoodVolumeSeller = (float)reader.GetDouble(5);
+            report.DealDate = reader.GetString(6);
+            report.DealNumber = reader.GetString(7);
+            report.object_hash = reader.GetString(8);
             return report;
         }
         catch (Exception e)

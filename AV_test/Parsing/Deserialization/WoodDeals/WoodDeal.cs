@@ -12,7 +12,7 @@ namespace AV_test.Parsing.Deserialization.WoodDeals
         public string BuyerInn { get; set; }
         public float WoodVolumeBuyer { get; set; }
         public float WoodVolumeSeller { get; set; }
-        public DateTime DealDate { get; set; }//in .net 6 DateOnly
+        public string DealDate { get; set; }//in .net 6 DateOnly
         public string DealNumber { get; set; }
         [JsonIgnore]
         public string object_hash { get; set; }

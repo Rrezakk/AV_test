@@ -43,21 +43,23 @@ public class WoodDealsPageParser
     }
     private void ProcessDeal(ReportWoodDeal deal)
     {
-        Console.WriteLine($"Manipulating: {deal.object_hash}");
         
+        //there is some place for validation
+        // not valid - log and skip
+        
+        Console.Write($"Manipulating: {deal.object_hash}");
         //get object from db
         //check edit by hash
         //edit object or add to db
-        
         var dbDeal = _woodDealsRepository.Get(deal);
         if (dbDeal == null)//creating
         {
+            Console.WriteLine($" - creating entity");
             _woodDealsRepository.Create(deal);
             return;
         }
-        if (dbDeal.object_hash != deal.object_hash)//editing 
-        {
-            _woodDealsRepository.Edit(deal);
-        }
+        if (dbDeal.object_hash == deal.object_hash) return;//editing 
+        Console.WriteLine($" - editing entity");
+        _woodDealsRepository.Edit(deal);
     }
 }
