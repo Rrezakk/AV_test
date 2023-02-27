@@ -4,7 +4,6 @@ using AV_test.Parsing.Queries;
 using AV_test.Parsing.Queries.AV_test.Queries;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace AV_test.Parsing.PageParsers;
 
@@ -12,43 +11,53 @@ public class WoodDealsPageParser
 {
     private readonly IWoodDealsRepository _woodDealsRepository;
     private readonly QueryExecutor _queryExecutor;
-    public WoodDealsPageParser(IWoodDealsRepository woodDealsRepository)
+    public WoodDealsPageParser(IWoodDealsRepository woodDealsRepository,QueryExecutor queryExecutor)
     {
-        _woodDealsRepository = woodDealsRepository;
-        _queryExecutor = new QueryExecutor();
+        _woodDealsRepository = woodDealsRepository;//so dont have DI container...
+        _queryExecutor = queryExecutor;//so dont have DI container...
 
     }
     public void DoCycle()
     {
-        var dealsQuery = new GetCountQuery();
-        var dealsCountJson = _queryExecutor.Execute(dealsQuery);
+        var dealsCountJson = _queryExecutor.Execute(new GetCountQuery());
         var response = JsonConvert.DeserializeObject<SearchReportWoodDealResponse>(dealsCountJson ?? string.Empty)?.data.searchReportWoodDeal;
-        var index = 1;//1
-        var entitiesPerRequest = 50;
+        const int entitiesPerRequest = 20;
         var totalEntities = response?.total ?? 0;
         var ctr = 0;
-        while (index+entitiesPerRequest-1 < totalEntities)
+        var pagesTotal = totalEntities / entitiesPerRequest+1;
+        for (var i = 7597; i < pagesTotal; i++)
         {
-            Console.WriteLine($"Iteration: {index} {totalEntities - (index+entitiesPerRequest-1)}");
-            var q = new GetWoodDealsQuery(entitiesPerRequest,index);
+            Console.WriteLine($"Page: {i}");
+            var q = new GetWoodDealsQuery(entitiesPerRequest,i);
             var resp = _queryExecutor.Execute(q);
+            if (resp == null) continue;
             var deals = WoodDealDeserializer.GetDeals(resp);
-            DataManipulation(deals);
+            foreach (var deal in deals)
+            {
+                deal.object_hash = Domain.Helpers.ObjectHashingHelper.ComputeSha256Hash(deal);
+                ProcessDeal(deal);
+            }
             ctr += deals.Count;
-            index += entitiesPerRequest;
         }
-        if (index+entitiesPerRequest-1!=totalEntities)
-        {
-            var q = new GetWoodDealsQuery(totalEntities - (index+entitiesPerRequest-1),index);
-            var resp = _queryExecutor.Execute(q);
-            var deals = WoodDealDeserializer.GetDeals(resp);
-            ctr += deals.Count;
-            DataManipulation(deals);
-        }
-        Console.WriteLine($"Processed: {ctr} entities");
+        Console.WriteLine($"Processed total: {ctr} entities");
     }
-    private async void DataManipulation(List<ReportWoodDeal> deals)
+    private void ProcessDeal(ReportWoodDeal deal)
     {
+        Console.WriteLine($"Manipulating: {deal.object_hash}");
         
+        //get object from db
+        //check edit by hash
+        //edit object or add to db
+        
+        var dbDeal = _woodDealsRepository.Get(deal);
+        if (dbDeal == null)//creating
+        {
+            _woodDealsRepository.Create(deal);
+            return;
+        }
+        if (dbDeal.object_hash != deal.object_hash)//editing 
+        {
+            _woodDealsRepository.Edit(deal);
+        }
     }
 }

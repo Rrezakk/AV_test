@@ -11,11 +11,11 @@ namespace AV_test.Parsing.Queries
         {
             public HttpRequestMessage Message =>RequestMessage();
             private readonly int _count;
-            private readonly int _position;
-            public GetWoodDealsQuery(int count, int position)
+            private readonly int _page;
+            public GetWoodDealsQuery(int count, int page)
             {
                 this._count = count;
-                this._position = position;
+                this._page = page;
             }
             private HttpRequestMessage RequestMessage()
             {
@@ -24,7 +24,7 @@ namespace AV_test.Parsing.Queries
                 ""query"": ""query SearchReportWoodDeal($size: Int!, $number: Int!, $filter: Filter, $orders: [Order!]) {{\n searchReportWoodDeal(filter: $filter, pageable: {{number: $number, size: $size}}, orders: $orders) {{\n content {{\n sellerName\n sellerInn\n buyerName\n buyerInn\n woodVolumeBuyer\n woodVolumeSeller\n dealDate\n dealNumber\n __typename\n }}\n __typename\n }}\n}}\n"",
                 ""variables"": {{
                     ""size"": {_count},
-                    ""number"": {_position},
+                    ""number"": {_page},
                     ""filter"": null,
                     ""orders"": null
                 }},

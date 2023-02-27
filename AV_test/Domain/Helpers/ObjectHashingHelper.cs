@@ -2,22 +2,25 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace AV_test.Domain.Helpers
 {
     public class ObjectHashingHelper
     {
-        public static string GetObjectHash(object o)
+        public static string ComputeSha256Hash(object obj)
         {
-            var formatter = new BinaryFormatter();
-            var stream = new MemoryStream();
-            formatter.Serialize(stream, o);
-            var bytes = stream.ToArray();
-            using (HashAlgorithm hashAlg = SHA256.Create())
-            {
-                var hash = hashAlg.ComputeHash(bytes);
-                return BitConverter.ToString(hash);
-            }
+            // Convert object to JSON string
+            var jsonString = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+    
+            // Compute hash
+            using var sha256Hash = SHA256.Create();
+            var bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(jsonString));
+        
+            // Convert hash to base64 string
+            var base64String = Convert.ToBase64String(bytes);
+        
+            return base64String;
         }
     }
 }
