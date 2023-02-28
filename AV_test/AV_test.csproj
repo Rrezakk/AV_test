@@ -72,9 +72,11 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Test_Requests\file.txt" />
-      <Content Include="Test_Requests\Get20.http" />
-      <Content Include="Test_Requests\getdata.http" />
+      <Content Include="Developer\file.txt" />
+      <Content Include="Developer\Get20.http" />
+      <Content Include="Developer\getdata.http" />
+      <Content Include="Developer\robots.txt" />
+      <Content Include="Developer\Отчет.docx" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
