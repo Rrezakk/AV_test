@@ -42,6 +42,9 @@ public static class ValidationExtensions
     }
     public static bool IsValidInn(this string? inn)
     {
-        return inn != null && InnRegex.IsMatch(inn);
+        var result = inn != null &&
+                     InnRegex.IsMatch(inn) &&
+                     inn.Replace("0","").Length!=0;//excluding 000000000 inn's
+        return result;
     }
 }

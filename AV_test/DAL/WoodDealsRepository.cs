@@ -104,4 +104,42 @@ public class WoodDealsRepository:IWoodDealsRepository
         }
         
     }
+    public bool EnsureCreated()
+    {
+        try
+        {
+            CreateReportWoodDealTable();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception during table creation: {e.Message}");
+            return false;
+        }
+    }
+    private void CreateReportWoodDealTable()
+    {
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        using var command = new SqlCommand();
+        command.Connection = connection;
+        command.CommandText = @"
+                IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ReportWoodDeal]') AND type in (N'U'))
+                BEGIN
+                    CREATE TABLE ReportWoodDeal (
+                        SellerName NVARCHAR(255) NOT NULL,
+                        SellerInn CHAR(12) NOT NULL,
+                        BuyerName NVARCHAR(255) NOT NULL,
+                        BuyerInn CHAR(12) NOT NULL,
+                        WoodVolumeBuyer FLOAT NOT NULL,
+                        WoodVolumeSeller FLOAT NOT NULL,
+                        DealDate CHAR(10) NOT NULL,
+                        DealNumber CHAR(28) NOT NULL,
+                        Object_hash CHAR(44) NOT NULL,
+                        CONSTRAINT PK_ReportWoodDeal PRIMARY KEY (SellerInn, BuyerInn, DealNumber) 
+                    )
+                END";
+        command.ExecuteNonQuery();
+        connection.Close();
+    }
 }

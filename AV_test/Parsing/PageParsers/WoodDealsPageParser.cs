@@ -31,7 +31,7 @@ public class WoodDealsPageParser
         var pagesTotal = totalEntities / _settings.SampleSize+1;//because API calls based on pages
         for (var i = 0; i < pagesTotal; i++)
         {
-            Console.WriteLine($"Page: {i}");
+            Console.WriteLine($"Page: {i}/{pagesTotal}");
             var q = new GetWoodDealsQuery(_settings.SampleSize,i);   //creating querry
             var resp = _queryExecutor.Execute(q);                        //executing it
             if (resp == null) continue;

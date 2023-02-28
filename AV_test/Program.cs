@@ -14,11 +14,12 @@ public static class Program
         const long delayBetweenParsings = 10 * 60 * 1000;
         var repo = new WoodDealsRepository(
             @"Server=localhost\MSSQLSERVER01;Database=Test;Trusted_Connection=True;");
+        repo.EnsureCreated();
         var queryExecutor = new QueryExecutor();
         var parsingSettings = new ParsingSettings()
         {
-            DelayBetweenRequests = 1000,
-            SampleSize = 50,
+            DelayBetweenRequests = 50,
+            SampleSize = 500,
         };
         var parser = new WoodDealsPageParser(parsingSettings,repo,queryExecutor);
         var stopwatch = new Stopwatch();
