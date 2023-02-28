@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace AV_test.Parsing.Deserialization.WoodDeals;
+namespace AV_test.Parsing.Deserialization;
 
 public static class WoodDealDeserializer
 {

@@ -1,10 +1,11 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable ClassNeverInstantiated.Global
+
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace AV_test.Parsing.Deserialization.WoodDeals;
+namespace AV_test.Parsing.Deserialization;
 
 public class ReportWoodDeal
 {
@@ -18,6 +19,7 @@ public class ReportWoodDeal
     public string? DealNumber { get; set; }
     [JsonIgnore]
     public string? object_hash { get; set; }
+
 }
 public class PageReportWoodDeal
 {

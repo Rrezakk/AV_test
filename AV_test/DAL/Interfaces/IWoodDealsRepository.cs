@@ -1,4 +1,4 @@
-﻿using AV_test.Parsing.Deserialization.WoodDeals;
+﻿using AV_test.Parsing.Deserialization;
 
 namespace AV_test.DAL.Interfaces;
 

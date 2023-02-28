@@ -12,7 +12,12 @@ public static class Program
         var repo = new WoodDealsRepository(
             @"Server=localhost\MSSQLSERVER01;Database=Test;Trusted_Connection=True;");
         var queryExecutor = new QueryExecutor();
-        var parser = new WoodDealsPageParser(repo,queryExecutor);
+        var parsingSettings = new ParsingSettings()
+        {
+            DelayBetweenRequests = 100,
+            SampleSize = 50,
+        };
+        var parser = new WoodDealsPageParser(parsingSettings,repo,queryExecutor);
         parser.DoCycle();
         Console.ReadLine();
     }

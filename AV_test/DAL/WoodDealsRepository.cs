@@ -1,5 +1,5 @@
 ﻿using AV_test.DAL.Interfaces;
-using AV_test.Parsing.Deserialization.WoodDeals;
+using AV_test.Parsing.Deserialization;
 using System;
 using System.Data.SqlClient;
 using System.Globalization;

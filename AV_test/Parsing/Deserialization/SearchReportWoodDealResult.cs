@@ -1,7 +1,7 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable ClassNeverInstantiated.Global
-namespace AV_test.Parsing.Deserialization.WoodDeals;
+namespace AV_test.Parsing.Deserialization;
 
 public class SearchReportWoodDealResponse
 {

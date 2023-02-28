@@ -56,22 +56,25 @@
         <Compile Include="DAL\Interfaces\IGenericRepository.cs" />
         <Compile Include="DAL\Interfaces\IWoodDealsRepository.cs" />
         <Compile Include="DAL\WoodDealsRepository.cs" />
-        <Compile Include="ObjectHashingHelper.cs" />
-        <Compile Include="Parsing\Deserialization\WoodDeals\SearchReportWoodDealResult.cs" />
-        <Compile Include="Parsing\Deserialization\WoodDeals\ReportWoodDeal.cs" />
-        <Compile Include="Parsing\Deserialization\WoodDeals\WoodDealDeserializer.cs" />
+        <Compile Include="Parsing\Deserialization\ReportWoodDeal.cs" />
+        <Compile Include="Parsing\Deserialization\SearchReportWoodDealResult.cs" />
+        <Compile Include="Parsing\Deserialization\WoodDealDeserializer.cs" />
+        <Compile Include="Parsing\ObjectHashingHelper.cs" />
+        <Compile Include="Parsing\PageParsers\ParsingSettings.cs" />
         <Compile Include="Parsing\PageParsers\WoodDealsPageParser.cs" />
         <Compile Include="Parsing\Queries\GetCountQuery.cs" />
         <Compile Include="Parsing\Queries\GetWoodDealsQuery.cs" />
         <Compile Include="Parsing\Queries\IApiQuery.cs" />
         <Compile Include="Parsing\QueryExecutor.cs" />
+        <Compile Include="Parsing\Validation\ValidationExtensions.cs" />
+        <Compile Include="Parsing\Validation\WoodDealValidator.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="file.txt" />
-      <Content Include="Get20.http" />
-      <Content Include="getdata.http" />
+      <Content Include="Test_Requests\file.txt" />
+      <Content Include="Test_Requests\Get20.http" />
+      <Content Include="Test_Requests\getdata.http" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
