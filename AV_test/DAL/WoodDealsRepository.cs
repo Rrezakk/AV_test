@@ -79,18 +79,29 @@ public class WoodDealsRepository:IWoodDealsRepository
     }
     public bool Edit(ReportWoodDeal entity)
     {
-        entity.object_hash = ObjectHashingHelper.ComputeSha256Hash(entity);
-        using var connection = new SqlConnection(_connectionString);
-        connection.Open();
+        try
+        {
+            entity.object_hash = ObjectHashingHelper.ComputeSha256Hash(entity);
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
 
-        // Construct the SQL command with parameters for the composite primary key and updated fields
-        var sql = "UPDATE ReportWoodDeal " +
-                  $"SET SellerName = '{entity.SellerName}', BuyerName = '{entity.BuyerName}', WoodVolumeBuyer = '{entity.WoodVolumeBuyer}', " +
-                  $"WoodVolumeSeller = '{entity.WoodVolumeSeller}', DealDate = '{entity.DealDate}', object_hash = '{entity.object_hash}' " +
-                  $"WHERE SellerInn = '{entity.SellerInn}' AND BuyerInn = '{entity.BuyerInn}' AND DealNumber = '{entity.DealNumber}'";
-        using var command = new SqlCommand(sql, connection);
-        // Execute the SQL command and check the number of rows affected
-        var rowsAffected = command.ExecuteNonQuery();
-        return rowsAffected != 0;
+            // Construct the SQL command with parameters for the composite primary key and updated fields
+            var sql = "UPDATE ReportWoodDeal " +
+                      $"SET SellerName = '{entity.SellerName}', BuyerName = '{entity.BuyerName}', " +
+                      $"WoodVolumeBuyer = '{entity.WoodVolumeBuyer.ToString(CultureInfo.InvariantCulture).Replace(',', '.')}', " +
+                      $"WoodVolumeSeller = '{entity.WoodVolumeSeller.ToString(CultureInfo.InvariantCulture).Replace(',', '.')}', " +
+                      $"DealDate = '{entity.DealDate}', object_hash = '{entity.object_hash}' " +
+                      $"WHERE SellerInn = '{entity.SellerInn}' AND BuyerInn = '{entity.BuyerInn}' AND DealNumber = '{entity.DealNumber}'";
+            using var command = new SqlCommand(sql, connection);
+            // Execute the SQL command and check the number of rows affected
+            var rowsAffected = command.ExecuteNonQuery();
+            return rowsAffected != 0;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Exception editing deal: {e.Message}");
+            return false;
+        }
+        
     }
 }

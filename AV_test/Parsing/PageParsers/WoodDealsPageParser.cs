@@ -66,8 +66,11 @@ public class WoodDealsPageParser
             _woodDealsRepository.Create(deal);//saving entity to db
             return;
         }
-        if (dbDeal.object_hash == deal.object_hash) return;//editing entity in db
-        Console.WriteLine(" - editing entity");
-        _woodDealsRepository.Edit(deal);
+        if (dbDeal.object_hash != deal.object_hash){
+            //editing entity in db
+            Console.WriteLine(" - editing entity");
+            _woodDealsRepository.Edit(deal);
+        }
+        Console.WriteLine(" - skipped the same");
     }
 }
